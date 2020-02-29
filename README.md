@@ -12,3 +12,26 @@ $ mvn -B archetype:generate \
     -Dversion=1.0-SNAPSHOT \
     -Dname=HelloWorld
 ```
+
+Build the application and run it.
+
+```
+$ mvn package
+$ java -jar target/hello-dropwizard-1.0-SNAPSHOT.jar server config.yml
+```
+
+Hit the endpoint.
+
+```
+$ curl http://localhost:8080            
+{"code":404,"message":"HTTP 404 Not Found"}
+$ curl http://localhost:8081/healthcheck                     
+{"deadlocks":{"healthy":true}}
+```
+
+## Docker
+
+```
+$ docker build -t hello-dropwizard:1.0 .
+$ docker run --rm -p 8080:8080 -p 8081:8081 hello-dropwizard:1.0
+```
