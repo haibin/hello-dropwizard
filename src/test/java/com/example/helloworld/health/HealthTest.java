@@ -21,11 +21,23 @@ public class HealthTest {
             new DropwizardAppRule<>(HelloWorldApplication.class, ResourceHelpers.resourceFilePath("config.yml"));
 
     @Test
-    public void loginHandlerRedirectsAfterPost() {
+    public void healthCheck() {
         Client client = RULE.client();
 
         Response response = client.target(
                  String.format("http://localhost:%d/healthcheck", RULE.getAdminPort()))
+                .request()
+                .get();
+
+        assertThat(response.getStatus()).isEqualTo(200);
+    }
+
+    @Test
+    public void helloWorld() {
+        Client client = RULE.client();
+
+        Response response = client.target(
+                 String.format("http://localhost:%d/hello-world", RULE.getLocalPort()))
                 .request()
                 .get();
 
