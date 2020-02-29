@@ -1,3 +1,5 @@
+https://travis-ci.com/haibin/hello-dropwizard.svg?branch=master
+
 # hello-dropwizard
 
 Use `java-simple` to create the project skeleton. Note that I'm using version 1.3.9, not the latest 2.0.0. Because I want to use `dropwizard-guice` which does not seem to work with the latest version of dropwizard.
