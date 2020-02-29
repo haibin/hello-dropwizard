@@ -2,3 +2,6 @@ logging:
   level: INFO
   loggers:
     com.example.helloworld: DEBUG
+
+redisHost: localhost
+redisPort: 6379

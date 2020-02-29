@@ -11,15 +11,25 @@ import javax.ws.rs.core.MediaType;
 
 import com.codahale.metrics.annotation.Timed;
 import com.example.helloworld.api.Saying;
+import com.example.helloworld.db.RedisDao;
+import com.google.inject.Inject;
 
 @Path("/hello-world")
 @Produces(MediaType.APPLICATION_JSON)
 public class HelloWorldResource {
     private final AtomicLong counter = new AtomicLong();
 
+    private RedisDao redisDao;
+
+    @Inject
+    public HelloWorldResource(RedisDao redisDao) {
+        this.redisDao = redisDao;
+    }
+
     @GET
     @Timed
     public Saying sayHello(@QueryParam("name") Optional<String> name) {
-        return new Saying(counter.incrementAndGet(), "john");
+        String val = redisDao.getData(name.orElse(""));
+        return new Saying(counter.incrementAndGet(), val);
     }
 }
