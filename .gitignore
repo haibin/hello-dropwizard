@@ -23,3 +23,8 @@
 hs_err_pid*
 
 target
+.classpath
+.settings
+.vscode
+.project
+dependency-reduced-pom.xml
