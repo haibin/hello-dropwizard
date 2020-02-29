@@ -1,4 +1,4 @@
-https://travis-ci.com/haibin/hello-dropwizard.svg?branch=master
+[![Build Status](https://travis-ci.com/haibin/hello-dropwizard.svg?branch=master)](https://travis-ci.com/haibin/hello-dropwizard)
 
 # hello-dropwizard
 
