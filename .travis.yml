@@ -1,4 +1,4 @@
 language: java
 
 script:
-    mvn clean test
+    docker-compose run web mvn clean test

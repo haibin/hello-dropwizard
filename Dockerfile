@@ -1,5 +1,9 @@
-FROM adoptopenjdk:11-jre-hotspot
+# FROM adoptopenjdk:11-jre-hotspot
+FROM maven:3.6-jdk-11-slim
 
-ADD target/hello-dropwizard-1.0-SNAPSHOT.jar hello-dropwizard-1.0-SNAPSHOT.jar
-ADD config.yml config.yml
-ENTRYPOINT ["java","-jar","hello-dropwizard-1.0-SNAPSHOT.jar","server", "config.yml"]
+WORKDIR /app
+COPY src /app
+COPY pom.xml /app
+COPY Dockerfile /app
+COPY docker-compose.yml /app
+
