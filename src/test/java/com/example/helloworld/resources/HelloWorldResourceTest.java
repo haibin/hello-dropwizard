@@ -7,7 +7,9 @@ import javax.ws.rs.core.Response;
 
 import com.example.helloworld.HelloWorldApplication;
 import com.example.helloworld.HelloWorldConfiguration;
+import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
+import org.junit.AfterClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -19,6 +21,12 @@ public class HelloWorldResourceTest {
     @ClassRule
     public static final DropwizardAppRule<HelloWorldConfiguration> RULE =
             new DropwizardAppRule<>(HelloWorldApplication.class, ResourceHelpers.resourceFilePath("config.yml"));
+
+    @AfterClass
+    public static void tearDown() {
+        // https://github.com/HubSpot/dropwizard-guice#testing
+        JerseyGuiceUtils.reset();
+    }
 
     @Test
     public void helloWorld() {

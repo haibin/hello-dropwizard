@@ -3,6 +3,6 @@ logging:
     loggers:
       com.example.helloworld: DEBUG
   
-redisHost: localhost
+redisHost: redis
 redisPort: 6379
       
