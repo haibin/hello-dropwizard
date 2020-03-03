@@ -1,4 +1,4 @@
-package com.example.helloworld.health;
+package com.example.helloworld.resources;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,12 +16,12 @@ import org.junit.Test;
 import io.dropwizard.testing.ResourceHelpers;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 
-public class HealthTest {
+public class HelloWorldResourceIntegrationTest {
 
     @ClassRule
     public static final DropwizardAppRule<HelloWorldConfiguration> RULE =
         new DropwizardAppRule<>(
-            HelloWorldApplication.class,
+            HelloWorldApplication.class, 
             ResourceHelpers.resourceFilePath("config_test.yml")
         );
 
@@ -32,14 +32,14 @@ public class HealthTest {
     }
 
     @Test
-    public void healthCheck() {
+    public void helloWorld() {
         Client client = RULE.client();
 
         Response response = client.target(
-                 String.format("http://localhost:%d/healthcheck", RULE.getAdminPort()))
+                 String.format("http://localhost:%d/hello-world", RULE.getLocalPort()))
                 .request()
                 .get();
 
         assertThat(response.getStatus()).isEqualTo(200);
-    }
+    }    
 }

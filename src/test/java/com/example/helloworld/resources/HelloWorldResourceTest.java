@@ -1,42 +1,48 @@
 package com.example.helloworld.resources;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import javax.ws.rs.client.Client;
-import javax.ws.rs.core.Response;
-
-import com.example.helloworld.HelloWorldApplication;
-import com.example.helloworld.HelloWorldConfiguration;
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
-
-import org.junit.AfterClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import io.dropwizard.testing.ResourceHelpers;
-import io.dropwizard.testing.junit.DropwizardAppRule;
+import io.dropwizard.testing.junit.ResourceTestRule;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
+
+import com.example.helloworld.api.Saying;
+import com.example.helloworld.db.RedisDao;
 
 public class HelloWorldResourceTest {
 
-    @ClassRule
-    public static final DropwizardAppRule<HelloWorldConfiguration> RULE =
-            new DropwizardAppRule<>(HelloWorldApplication.class, ResourceHelpers.resourceFilePath("config.yml"));
+    private static final RedisDao dao = mock(RedisDao.class);
 
-    @AfterClass
-    public static void tearDown() {
-        // https://github.com/HubSpot/dropwizard-guice#testing
-        JerseyGuiceUtils.reset();
+    @ClassRule
+    public static final ResourceTestRule resources = ResourceTestRule.builder()
+        .addResource(new HelloWorldResource(dao))
+        .build();
+
+    @Before
+    public void setup() {
+        when(dao.getData(eq("hello"))).thenReturn("world");
+    }
+
+    @After
+    public void tearDown(){
+        // we have to reset the mock after each test because of the
+        // @ClassRule, or use a @Rule as mentioned below.
+        reset(dao);
     }
 
     @Test
-    public void helloWorld() {
-        Client client = RULE.client();
-
-        Response response = client.target(
-                 String.format("http://localhost:%d/hello-world", RULE.getLocalPort()))
-                .request()
-                .get();
-
-        assertThat(response.getStatus()).isEqualTo(200);
-    }    
+    public void testSayHello() {
+        Saying saying = resources.target("/hello-world")
+            .queryParam("name", "hello")
+            .request()
+            .get(Saying.class);
+        assertThat(saying.getContent()).isEqualTo("world");
+    }
 }

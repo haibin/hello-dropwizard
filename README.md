@@ -37,3 +37,12 @@ $ curl http://localhost:8081/healthcheck
 $ docker build -t hello-dropwizard:1.0 .
 $ docker run --rm -p 8080:8080 -p 8081:8081 hello-dropwizard:1.0
 ```
+
+## Test
+
+The integration tests need a redis so we run tests in docker-compose. Note that `src/test/resources/config_test.yml` is used in the integration tests and it points to a redis defined in `docker-compose.yml`.
+
+```
+$ docker-compose up -d redis
+$ docker-compose run web mvn clean test
+```
